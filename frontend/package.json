@@ -1,0 +1,23 @@
+{
+  "name": "frontend",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fontsource/roboto": "^5.0.8",
+    "@mdi/font": "^7.4.47",
+    "@vue/cli-plugin-babel": "^5.0.8",
+    "vue": "^3.4.15",
+    "vue-router": "^4.2.5",
+    "vuetify": "^3.5.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.3",
+    "vite": "^5.0.11"
+  }
+}
