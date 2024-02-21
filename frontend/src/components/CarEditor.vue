@@ -12,8 +12,8 @@
           <v-color-picker mode="rgb" v-model="car.color" hide-canvas hide-inputs
             :rules="[rules.required]"></v-color-picker>
           <v-select v-model="car.brand.name" label="Brands"
-            :items="brands.map(brand => ({ value: brand._id, title: brand.name, props: { subtitle: brand.name } }))" chips
-            multiple>
+            :items="brands.map(brand => ({ value: brand._id, title: brand.name}))" chips
+            >
           </v-select>
         </v-form>
       </v-card-text>
@@ -105,7 +105,17 @@ export default {
     }
   },
   mounted() {
-    this.brands = ["Audi", "Mazda", "Toyota", "BMW", "Bentley", "Mercedes", "Lexus", "Honda", "Hyundai", "Ferrari", "Cadillac"]
+    this.brands = [{_id:1,name:"Audi"},
+                  {_id:2,name:"Mazda"}, 
+                  {_id:3,name: "Toyota"},
+                  {_id:4,name: "BMW"},
+                  {_id:5,name: "Bentley"},
+                  {_id:6,name: "Mercedes"},
+                  {_id:7,name: "Lexus"},
+                  {_id:8,name: "Honda"},
+                  {_id:9,name: "Hyundai"},
+                  {_id:10,name: "Ferrari"},
+                  {_id:11,name: "Cadillac"}]
     if (this.id) {
       fetch('/car?_id=' + this.id, { method: 'GET' })
         .then((res) => {
