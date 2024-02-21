@@ -2,10 +2,11 @@ const mongoose = require('mongoose')
 const car = require('./car')
 
 const schema = new mongoose.Schema({
+    name: { type: String, required: true },
     marka: {
         name:{type: String, required: true}
     },
-    productionYear: { type: String, required: true },
+    productionYear: { type: Number, required: true },
     dayPrice: { type: Number, required: true },
     color: { type: String, required: false, default: '#000000' },
 }, {
@@ -44,9 +45,7 @@ module.exports = {
                 { $sort: { name: 1 }},
                 { $match: 
                     { name: { $regex: new RegExp(req.query.search, 'i') } }
-                },
-                { $set: { members: { $size: '$members' }}}
-
+                }
             ]
             aggregation.push({ $skip: parseInt(req.query.skip) || 0 })
             aggregation.push({ $limit: parseInt(req.query.limit) || 10 })
@@ -90,9 +89,7 @@ module.exports = {
         const _id = req.query._id
         model.findOneAndDelete({ _id }).then((deleted) => {
             if(deleted) {
-                car.getModel().updateMany({}, { $pull: { projects: _id } })
-                .then(() => res.json(deleted))
-                .catch(err => res.status(400).json({ error: err.message }))
+                res.json(deleted)
             } else {
                 res.status(404).json({ error: 'No such object' })
             }

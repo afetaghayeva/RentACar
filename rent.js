@@ -1,11 +1,10 @@
 const mongoose = require('mongoose')
-const rent = require('./rent')
 
 const schema = new mongoose.Schema({
     rentDate: { type: Date, required: true, transform: v => v.toISOString().slice(0, 10)  },
     dayCount: { type: Number, required: true },
     totalPrice: { type: Number, required: true },
-    personId: { type: mongoose.ObjectId, ref: 'person' },
+    userId: { type: mongoose.ObjectId, ref: 'user' },
     carId: { type: mongoose.ObjectId, ref: 'car' }
 }, {
     versionKey: false,
@@ -90,7 +89,7 @@ module.exports = {
         const _id = req.query._id
         model.findOneAndDelete({ _id }).then((deleted) => {
             if (deleted) {
-                rent.getModel().updateMany({}, { $pull: { projects: _id } })
+                getModel().updateMany({}, { $pull: { projects: _id } })
                     .then(() => res.json(deleted))
                     .catch(err => res.status(400).json({ error: err.message }))
             } else {
