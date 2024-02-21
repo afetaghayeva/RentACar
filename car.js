@@ -3,9 +3,7 @@ const car = require('./car')
 
 const schema = new mongoose.Schema({
     name: { type: String, required: true },
-    brand: {
-        name:{type: String, required: true}
-    },
+    brandName: { type: String, required: true },
     productionYear: { type: Number, required: true },
     dayPrice: { type: Number, required: true },
     color: { type: String, required: false, default: '#000000' },

@@ -11,8 +11,8 @@
             :rules="[rules.required]"></v-text-field>
           <v-color-picker mode="rgb" v-model="car.color" hide-canvas hide-inputs
             :rules="[rules.required]"></v-color-picker>
-          <v-select v-model="car.brand.name" label="Brands"
-            :items="brands.map(brand => ({ value: brand._id, title: brand.name}))" chips
+          <v-select v-model="car.brandName" label="Brands"
+            :items="brands.map(brand => ({ value: brand._id, title: brandName}))" chips
             >
           </v-select>
         </v-form>
@@ -128,9 +128,7 @@ export default {
         .catch((err) => console.error(err.message))
     } else {
       this.car = {
-        brand: {
-          name: ""
-        }
+        brandName:""
       }
     }
   }

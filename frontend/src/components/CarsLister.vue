@@ -41,7 +41,7 @@
           <tbody>
             <tr v-for="(car, index) in cars" :key="index" @click="checkIfInRole(user, [ 0 ]) && click(car)">
               <td>{{ car.name }}</td>
-              <td>{{ car.brand.name }}</td>
+              <td>{{ car.brandName }}</td>
               <td>{{ car.productionYear }}</td>
               <td>{{ car.dayPrice }}</td>
               <td><span :style="{'color':car.color,'width':'20px','height':'20px','border-radius':'50%'}"></span></td>
