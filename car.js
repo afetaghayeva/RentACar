@@ -3,7 +3,7 @@ const car = require('./car')
 
 const schema = new mongoose.Schema({
     name: { type: String, required: true },
-    marka: {
+    brand: {
         name:{type: String, required: true}
     },
     productionYear: { type: Number, required: true },

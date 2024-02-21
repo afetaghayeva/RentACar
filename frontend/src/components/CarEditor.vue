@@ -1,0 +1,128 @@
+<template>
+  <div>
+    <v-card>
+      <v-card-title>{{ id ? 'Edit' : 'Create' }} car</v-card-title>
+      <v-card-text>
+        <v-form v-model="iscarValid">
+          <v-text-field variant="solo" label="Name" v-model="car.name" :rules="[rules.required]"></v-text-field>
+          <v-text-field variant="solo" type="number" label="ProductionYear" v-model="car.productionYear"
+            :rules="[rules.required]"></v-text-field>
+          <v-text-field variant="solo" type="number" label="Day Price" v-model="car.dayPrice"
+            :rules="[rules.required]"></v-text-field>
+          <v-color-picker mode="rgb" v-model="car.color" hide-canvas hide-inputs
+            :rules="[rules.required]"></v-color-picker>
+          <v-select v-model="car.brand.name" label="Brands"
+            :items="brands.map(brand => ({ value: brand._id, title: brand.name, props: { subtitle: brand.name } }))" chips
+            multiple>
+          </v-select>
+        </v-form>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn variant="elevated" color="success" @click="add" :disabled="!isCarValid" v-if="!id">Add</v-btn>
+        <v-btn variant="elevated" color="success" @click="modify" :disabled="!isCarValid" v-if="id">Modify</v-btn>
+        <v-btn variant="elevated" color="error" @click="remove" v-if="id">Remove</v-btn>
+        <v-btn variant="elevated" color="warning" @click="cancel">Cancel</v-btn>
+      </v-card-actions>
+    </v-card>
+    <v-dialog v-model="confirmation" width="auto">
+      <ConfirmationDialog :question="'Are you sure to delete \'' + car.name + '\' ?'" @ok="removeReal"
+        @cancel="confirmation = false" />
+    </v-dialog>
+  </div>
+</template>
+
+<script>
+import ConfirmationDialog from './ConfirmationDialog.vue'
+
+export default {
+  name: 'carEditor',
+  props: ['id'],
+  components: { ConfirmationDialog },
+  emits: ['cancel', 'dataChanged'],
+  methods: {
+    add() {
+      fetch('/car', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(this.car)
+      })
+        .then((res) => {
+          res.json()
+            .then(() => {
+              this.$emit('dataChanged')
+            })
+            .catch((err) => console.error(err.message))
+        })
+        .catch((err) => console.error(err.message))
+    },
+    modify() {
+      fetch('/car?_id=' + this.id, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(this.car)
+      })
+        .then((res) => {
+          res.json()
+            .then(() => {
+              this.$emit('dataChanged')
+            })
+            .catch(err => console.error(err.message))
+        })
+        .catch(err => console.error(err.message))
+    },
+    remove() {
+      this.confirmation = true
+    },
+    removeReal() {
+      this.confirmation = false
+      fetch('/car?_id=' + this.id, {
+        method: 'DELETE'
+      })
+        .then((res) => {
+          res.json()
+            .then(() => {
+              this.$emit('dataChanged')
+            })
+            .catch((err) => console.error(err.message))
+        })
+        .catch((err) => console.error(err.message))
+    },
+    cancel() {
+      this.$emit('cancel')
+    }
+  },
+  data() {
+    return {
+      isCarValid: false,
+      rules: {
+        required: value => !!value || 'empty value is not allowed'
+      },
+      car: {},
+      dialog: false,
+      confirmation: false,
+      brands: []
+    }
+  },
+  mounted() {
+    this.brands = ["Audi", "Mazda", "Toyota", "BMW", "Bentley", "Mercedes", "Lexus", "Honda", "Hyundai", "Ferrari", "Cadillac"]
+    if (this.id) {
+      fetch('/car?_id=' + this.id, { method: 'GET' })
+        .then((res) => {
+          res.json()
+            .then(data => {
+              Object.assign(this.car, data)
+            })
+            .catch((err) => console.error(err.message))
+        })
+        .catch((err) => console.error(err.message))
+    } else {
+      this.car = {
+        brand: {
+          name: ""
+        }
+      }
+    }
+  }
+}
+</script>

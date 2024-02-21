@@ -20,20 +20,18 @@ const vuetify = createVuetify({
 // Router
 import { createRouter, createWebHashHistory } from 'vue-router'
 // import Dashboard from './components/Dashboard.vue'
-// import PersonsLister from './components/PersonsLister.vue'
-// import ProjectsLister from './components/ProjectsLister.vue'
-// import ProjectsMap from './components/ProjectsMap.vue'
-// import Chat from './components/Chat.vue'
+import CarsLister from './components/CarsLister.vue'
+// import Rent from './components/Rent.vue'
+import Chat from './components/Chat.vue'
 
 const router = createRouter({
     history: createWebHashHistory(),
     routes: [
-        { path: '/', component: Dashboard },
-        { path: '/persons', component: PersonsLister },
-        { path: '/projects', component: ProjectsLister },
-        { path: '/map', component: ProjectsMap },
+        // { path: '/', component: Dashboard },
+        { path: '/cars', component: CarsLister },
+        // { path: '/projects', component: ProjectsLister },
         { path: '/chat', component: Chat }
     ]
 })
 
-createApp(App).mount('#app')
+createApp(App).use(vuetify).use(router).mount('#app')
