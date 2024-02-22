@@ -1,17 +1,18 @@
 <template>
   <div>
-    <v-card>
-      <v-card-title>{{ id ? 'Edit' : 'Create' }} car</v-card-title>
+    <v-card style="overflow-y: scroll;height: 500px;">
+      <v-card-title >{{ id ? 'Edit' : 'Create' }} car</v-card-title>
       <v-card-text>
-        <v-form v-model="iscarValid">
+        <v-form v-model="isCarValid">
           <v-text-field variant="solo" label="Name" v-model="car.name" :rules="[rules.required]"></v-text-field>
-          <v-text-field variant="solo" type="number" label="ProductionYear" v-model="car.productionYear"
+          <v-text-field variant="solo" type="number" label="Production Year" v-model="car.productionYear"
             :rules="[rules.required]"></v-text-field>
           <v-text-field variant="solo" type="number" label="Day Price" v-model="car.dayPrice"
             :rules="[rules.required]"></v-text-field>
-          <v-color-picker mode="rgb" v-model="car.color" hide-canvas hide-inputs
-            :rules="[rules.required]"></v-color-picker>
+          <v-color-picker variant="solo"  mode="rgb" v-model="car.color" hide-inputs 
+            ></v-color-picker>
           <v-select v-model="car.brandName" label="Brands"
+          :rules="[rules.required]"
             :items="brands.map(brand => ({ value: brand.name, title: brand.name}))" chips
             >
           </v-select>
@@ -42,6 +43,7 @@ export default {
   emits: ['cancel', 'dataChanged'],
   methods: {
     add() {
+      console.log(this.car)
       fetch('/car', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

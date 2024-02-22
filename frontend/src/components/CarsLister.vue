@@ -24,7 +24,7 @@
               <th class="text-left">
                 Name
               </th>
-              <th class="text-right">
+              <th class="text-left">
                 Brand name
               </th>
               <th class="text-left">
@@ -44,7 +44,7 @@
               <td>{{ car.brandName }}</td>
               <td>{{ car.productionYear }}</td>
               <td>{{ car.dayPrice }}</td>
-              <td><span :style="{'color':car.color,'width':'20px','height':'20px','border-radius':'50%'}"></span></td>
+              <td><div :style="{'background-color':car.color,'width':'20px','height':'20px','border-radius':'50%'}"></div></td>
               <td>
               </td>
             </tr>
