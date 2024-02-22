@@ -1,11 +1,13 @@
 const mongoose = require('mongoose')
+const car = require('./car')
 
 const schema = new mongoose.Schema({
     rentDate: { type: Date, required: true, transform: v => v.toISOString().slice(0, 10)  },
     dayCount: { type: Number, required: true },
     totalPrice: { type: Number, required: true },
-    userId: { type: mongoose.ObjectId, ref: 'user' },
-    carId: { type: mongoose.ObjectId, ref: 'car' }
+    description: { type: String, required: true },
+    userName: { type: String, required:true },
+    carName: { type: String, required:true }
 }, {
     versionKey: false,
     additionalProperties: false
@@ -25,37 +27,40 @@ module.exports = {
 
     get: (req, res) => {
         const _id = req.query._id
-        if (_id) {
+        if(_id) {
             model.findOne({ _id })
-                .then(data => {
-                    if (data) {
-                        res.json(data)
-                    } else {
-                        res.status(404).json({ error: 'No such object' })
-                    }
-                })
-                .catch(err => {
-                    res.status(408).json({ error: err.message })
-                })
+            .then(data => {
+                if(data) {
+                    res.json(data)
+                } else {
+                    res.status(404).json({ error: 'No such object' })
+                }
+            })
+            .catch(err => {
+                res.status(408).json({ error: err.message })
+            })
         } else {
             let aggregation = [
-                { $sort: { name: 1 } },
-                {
-                    $match:
-                        { name: { $regex: new RegExp(req.query.search, 'i') } }
+                { $sort: { description: 1 }},
+                { $match: 
+                    { description: { $regex: new RegExp(req.query.search, 'i') } }
                 },
-                { $set: { members: { $size: '$members' } } }
-
+                { $lookup: {
+                    from: 'cars',
+                    localField: '_id',
+                    foreignField: 'cars',
+                    as: 'cars'
+                }},
             ]
             aggregation.push({ $skip: parseInt(req.query.skip) || 0 })
             aggregation.push({ $limit: parseInt(req.query.limit) || 10 })
             model.aggregate(aggregation)
-                .then(data => {
-                    res.json(data)
-                })
-                .catch(err => {
-                    res.status(408).json({ error: err.message })
-                })
+            .then(data => {
+                res.json(data)
+            })
+            .catch(err => {
+                res.status(408).json({ error: err.message })
+            })
         }
     },
 
@@ -89,7 +94,7 @@ module.exports = {
         const _id = req.query._id
         model.findOneAndDelete({ _id }).then((deleted) => {
             if (deleted) {
-                getModel().updateMany({}, { $pull: { projects: _id } })
+                car.getModel().updateMany({}, { $pull: { cars: _id } })
                     .then(() => res.json(deleted))
                     .catch(err => res.status(400).json({ error: err.message }))
             } else {

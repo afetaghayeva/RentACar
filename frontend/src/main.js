@@ -21,7 +21,7 @@ const vuetify = createVuetify({
 import { createRouter, createWebHashHistory } from 'vue-router'
 // import Dashboard from './components/Dashboard.vue'
 import CarsLister from './components/CarsLister.vue'
-// import Rent from './components/Rent.vue'
+import RentsLister from './components/RentsLister.vue'
 import Chat from './components/Chat.vue'
 
 const router = createRouter({
@@ -29,7 +29,7 @@ const router = createRouter({
     routes: [
         // { path: '/', component: Dashboard },
         { path: '/cars', component: CarsLister },
-        // { path: '/projects', component: ProjectsLister },
+        { path: '/rents', component: RentsLister },
         { path: '/chat', component: Chat }
     ]
 })
