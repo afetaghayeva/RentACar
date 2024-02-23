@@ -45,7 +45,7 @@
               <td>{{ rent.dayCount }}</td>
               <td>{{ rent.totalPrice }}</td>
               <td>
-                <v-chip >
+                <v-chip>
                   {{ rent.carName }}
                 </v-chip>
               </td>
@@ -107,7 +107,7 @@ export default {
       editor: false,
       rents: [],
       totalPrice: 0,
-      cars:[],
+      cars: [],
       id: null,
       search: '',
       skip: 0,

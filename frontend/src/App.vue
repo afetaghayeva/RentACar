@@ -60,8 +60,8 @@
       return {
         navigation: [
             { title: 'Dashboard', icon: 'mdi-view-dashboard', href: '#/' },
-            { title: 'Cars', icon: 'mdi-account-multiple', href: '#/cars', roles: [ 0, 1 ] },
-            { title: 'Rents', icon: 'mdi-account-multiple', href: '#/rents', roles: [ 0, 1 ] },
+            { title: 'Cars', icon: 'mdi-car-settings', href: '#/cars' },
+            { title: 'Rents', icon: 'mdi-car-multiple', href: '#/rents', roles: [ 0, 1 ] },
             { title: 'Chat', icon: 'mdi-chat-processing-outline', href: '#/chat' },
         ],
         showNavigation: false,

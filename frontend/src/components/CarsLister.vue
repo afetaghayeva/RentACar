@@ -1,5 +1,5 @@
 <template>
-  <div v-if="checkIfInRole(user, [ 0, 1 ])">
+  <div>
     <v-card variant="text">
       <v-card-title>Cars</v-card-title>
       <v-card-subtitle>
@@ -57,7 +57,7 @@
       </v-card-actions>
     </v-card>
     <v-dialog v-model="editor" width="50%">
-      <CarEditor :id="id" @dataChanged="retrieve" @cancel="cancel"/>
+      <CarEditor :connection="connection" :id="id" @dataChanged="retrieve" @cancel="cancel"/>
     </v-dialog>
   </div>
 </template>
@@ -106,10 +106,48 @@ export default {
       id: null,
       search: '',
       skip: 0,
-      limit: 10
+      limit: 10,
+      connection: null
     }
   },
   mounted() {
+    this.connection = new WebSocket(
+      "ws://" + window.location.host + "/websocket"
+    );
+    this.connection.onopen = () => {
+      console.log("Websocket connection established");
+      setTimeout(
+        () =>
+          this.connection.send(
+            JSON.stringify({
+              event: "INIT",
+              session: this.user.sessionid || null,
+            })
+          ),
+        500
+      );
+    };
+    this.connection.onmessage = (event) => {
+      let data = {};
+      try {
+        data = JSON.parse(event.data);
+      } catch (err) {
+        console.error("Broken WS data", event.data);
+        return;
+      }
+      if (data.event == "CAR") {
+        fetch('/car?search=' + this.search + '&skip=' + this.skip + '&limit=' + this.limit, {
+        method: 'GET' })
+        .then((res) => {
+          res.json()
+            .then((data) => {
+              this.cars = data
+            })
+            .catch(err => console.error(err.message))
+        })
+        .catch(err => console.error(err.message))
+      }
+    };
     this.retrieve()
   } 
 }

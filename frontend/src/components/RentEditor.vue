@@ -57,20 +57,20 @@ import common from '../mixins/common'
 
 export default {
     name: 'RentEditor',
-    props: ['id', 'user'],
+    props: ['id', 'user', 'connection'],
     components: { ConfirmationDialog, VMap, VMapGoogleTileLayer, VMapZoomControl, VMapIconMarker },
     emits: ['cancel', 'dataChanged', 'dataAccessFailed'],
     mixins: [common],
-    methods: {
+    methods: {  
         add(user) {
             this.rent.userName = user.username;
             let price = 0;
-            this.cars.forEach(car=>{
-                if(car.name==this.rent.carName){
-                    price=car.dayPrice;
+            this.cars.forEach(car => {
+                if (car.name == this.rent.carName) {
+                    price = car.dayPrice;
                 }
             })
-            this.rent.totalPrice=this.rent.dayCount*price
+            this.rent.totalPrice = this.rent.dayCount * price
             fetch('/rent', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -85,12 +85,12 @@ export default {
         },
         modify() {
             let price = 0;
-            this.cars.forEach(car=>{
-                if(car.name==this.rent.carName){
-                    price=car.dayPrice;
+            this.cars.forEach(car => {
+                if (car.name == this.rent.carName) {
+                    price = car.dayPrice;
                 }
             })
-            this.rent.totalPrice=this.rent.dayCount*price
+            this.rent.totalPrice = this.rent.dayCount * price
             fetch('/rent?_id=' + this.id, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },

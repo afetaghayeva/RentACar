@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card style="overflow-y: scroll;height: 500px;">
-      <v-card-title >{{ id ? 'Edit' : 'Create' }} car</v-card-title>
+      <v-card-title>{{ id ? 'Edit' : 'Create' }} car</v-card-title>
       <v-card-text>
         <v-form v-model="isCarValid">
           <v-text-field variant="solo" label="Name" v-model="car.name" :rules="[rules.required]"></v-text-field>
@@ -9,12 +9,9 @@
             :rules="[rules.required]"></v-text-field>
           <v-text-field variant="solo" type="number" label="Day Price" v-model="car.dayPrice"
             :rules="[rules.required]"></v-text-field>
-          <v-color-picker variant="solo"  mode="rgb" v-model="car.color" hide-inputs 
-            ></v-color-picker>
-          <v-select v-model="car.brandName" label="Brands"
-          :rules="[rules.required]"
-            :items="brands.map(brand => ({ value: brand.name, title: brand.name}))" chips
-            >
+          <v-color-picker variant="solo" mode="rgb" v-model="car.color" hide-inputs></v-color-picker>
+          <v-select v-model="car.brandName" label="Brands" :rules="[rules.required]"
+            :items="brands.map(brand => ({ value: brand.name, title: brand.name }))" chips>
           </v-select>
         </v-form>
       </v-card-text>
@@ -38,7 +35,7 @@ import ConfirmationDialog from './ConfirmationDialog.vue'
 
 export default {
   name: 'carEditor',
-  props: ['id'],
+  props: ['id','connection'],
   components: { ConfirmationDialog },
   emits: ['cancel', 'dataChanged'],
   methods: {
@@ -52,6 +49,7 @@ export default {
         .then((res) => {
           res.json()
             .then(() => {
+              this.sendCar();
               this.$emit('dataChanged')
             })
             .catch((err) => console.error(err.message))
@@ -67,6 +65,7 @@ export default {
         .then((res) => {
           res.json()
             .then(() => {
+              this.sendCar();
               this.$emit('dataChanged')
             })
             .catch(err => console.error(err.message))
@@ -84,6 +83,7 @@ export default {
         .then((res) => {
           res.json()
             .then(() => {
+              this.sendCar();
               this.$emit('dataChanged')
             })
             .catch((err) => console.error(err.message))
@@ -92,7 +92,14 @@ export default {
     },
     cancel() {
       this.$emit('cancel')
-    }
+    },
+    sendCar() {
+      this.connection.send(
+        JSON.stringify({
+          event: "CAR",
+        })
+      );
+    },
   },
   data() {
     return {
@@ -107,17 +114,17 @@ export default {
     }
   },
   mounted() {
-    this.brands = [{_id:1,name:"Audi"},
-                  {_id:2,name:"Mazda"}, 
-                  {_id:3,name: "Toyota"},
-                  {_id:4,name: "BMW"},
-                  {_id:5,name: "Bentley"},
-                  {_id:6,name: "Mercedes"},
-                  {_id:7,name: "Lexus"},
-                  {_id:8,name: "Honda"},
-                  {_id:9,name: "Hyundai"},
-                  {_id:10,name: "Ferrari"},
-                  {_id:11,name: "Cadillac"}]
+    this.brands = [{ _id: 1, name: "Audi" },
+    { _id: 2, name: "Mazda" },
+    { _id: 3, name: "Toyota" },
+    { _id: 4, name: "BMW" },
+    { _id: 5, name: "Bentley" },
+    { _id: 6, name: "Mercedes" },
+    { _id: 7, name: "Lexus" },
+    { _id: 8, name: "Honda" },
+    { _id: 9, name: "Hyundai" },
+    { _id: 10, name: "Ferrari" },
+    { _id: 11, name: "Cadillac" }]
     if (this.id) {
       fetch('/car?_id=' + this.id, { method: 'GET' })
         .then((res) => {
@@ -130,7 +137,7 @@ export default {
         .catch((err) => console.error(err.message))
     } else {
       this.car = {
-        brandName:""
+        brandName: ""
       }
     }
   }
